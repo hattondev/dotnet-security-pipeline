@@ -3,7 +3,7 @@ name: security workflow
 on:
   workflow_call:
     inputs:
-      image_location:
+      image_name:
         required: true
         type: string
 
@@ -23,9 +23,9 @@ jobs:
           password: ${{secrets.REGISTRY_PASSWORD}}
       - name: Pull image
         run: |
-          docker pull ${{inputs.image_location}}
+          docker pull ${{secrets.REGISTRY_URL}}/images/${{inputs.image_name}}
       - name: Scan for vulnerabilities
         id: scan
         uses: crazy-max/ghaction-container-scan@v2
         with:
-          image: ${{inputs.image_location}}
+          image: ${{secrets.REGISTRY_URL}}/images/${{inputs.image_name}}
